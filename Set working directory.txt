@@ -1,0 +1,2 @@
+srun --account=project_2002674 --partition=small --time=04:00:00 --mem=64G --cpus-per-task=10 --pty bash
+cd /scratch/project_2002674/dansanto/RNA-Seq_PRJNA826339
