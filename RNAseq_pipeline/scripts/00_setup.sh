@@ -7,7 +7,7 @@ THREADS=10
 
 # Your reference files (must be present in $WORKDIR/ref_src/)
 REF_FA_GZ="GCF_033115175.1_mLepTim1.pri_genomic.fna.gz"
-REF_GFF_ZIP="Lepus_timidus_annotation.zip"
+REF_GFF_ZIP="Lepus_europaeus_annotation.zip"
 # REF_FA_GZ="GCA_040893245.2_mLepTim1.1_pri_genomic.fna.gz"
 # REF_GTF_GZ="GCA_040893245.2_mLepTim1.1_pri_genomic.gtf.gz"
 
