@@ -7,7 +7,7 @@ THREADS=10
 
 # Your reference files (must be present in $WORKDIR/ref_src/)
 REF_FA_GZ="GCF_033115175.1_mLepTim1.pri_genomic.fna.gz"
-REF_GTF_GZ="Lepus_timidus_annotation.zip"
+REF_GFF_ZIP="Lepus_timidus_annotation.zip"
 # REF_FA_GZ="GCA_040893245.2_mLepTim1.1_pri_genomic.fna.gz"
 # REF_GTF_GZ="GCA_040893245.2_mLepTim1.1_pri_genomic.gtf.gz"
 
@@ -40,7 +40,7 @@ cat > config.sh <<EOF
 WORKDIR="${WORKDIR}"
 THREADS=${THREADS}
 REF_FA_GZ="${REF_FA_GZ}"
-REF_GTF_GZ="${REF_GTF_GZ}"
+REF_GFF_ZIP="${REF_GFF_ZIP}"
 SJDB_OVERHANG=${SJDB_OVERHANG}
 EOF
 
@@ -48,5 +48,5 @@ echo "Setup done in: $WORKDIR"
 echo "Next:"
 echo "1) Copy your reference files into: $WORKDIR/ref_src/"
 echo "   - $REF_FA_GZ"
-echo "   - $REF_GTF_GZ"
+echo "   - $REF_GFF_ZIP"
 echo "2) Run: bash 01_config_sratoolkit.sh"
