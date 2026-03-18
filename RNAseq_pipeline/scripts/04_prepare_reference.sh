@@ -13,7 +13,7 @@ test -f "$WORKDIR/ref_src/$REF_GFF_ZIP" || { echo "Missing $WORKDIR/ref_src/$REF
 # Unzip file
 echo "Decompressing reference to $WORKDIR/ref/ ..."
 gunzip -c "$WORKDIR/ref_src/$REF_FA_GZ" > "$WORKDIR/ref/genome.fa"
-Unzip -c "$WORKDIR/ref_src/$REF_GFF_ZIP" > "$WORKDIR/ref/genes.gff"
+unzip -c "$WORKDIR/ref_src/$REF_GFF_ZIP" > "$WORKDIR/ref/genes.gff"
 
 # creat index (e.g fa.fai)
 echo "Indexing FASTA..."
