@@ -34,12 +34,15 @@ while read -r srr; do
     --in2 "$IN2" \
     --out1 "$OUT1" \
     --out2 "$OUT2" \
-    --detect_adapter_for_pe \     # Automatically detects and removes adapter sequences in paired-end sequencing.
-    --length_required 50 \        # Discard reads shorter than 50.
+    --detect_adapter_for_pe \
+    --length_required 50 \
     --thread "$THREADS" \
     --html "qc/${srr}.fastp.html" \
     --json "qc/${srr}.fastp.json" \
-    2>&1 | tee -a "logs/05_fastp.log"   # Real-time display and permanent storage of logs
+    2>&1 | tee -a "logs/05_fastp.log"
+    # detect_adapter_for_pe --> Automatically detects and removes adapter sequences in paired-end sequencing.
+    # Discard reads shorter than 50.
+    # Real-time display and permanent storage of logs
 
     echo "$srr QC-finish!"
     echo ""

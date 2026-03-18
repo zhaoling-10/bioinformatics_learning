@@ -18,13 +18,20 @@ if [ -f "$WORKDIR/star_index/Genome" ]; then
 fi
 
 STAR \
-  --runMode genomeGenerate \                        # Mode: generate genome index
-  --runThreadN "$THREADS" \                         # Number of threads to use
-  --genomeDir "$WORKDIR/star_index" \               # Index output directory
-  --genomeFastaFiles "$WORKDIR/ref/genome.fa" \     # Reference genome
-  --sjdbGTFfile "$WORKDIR/ref/genes.gff" \          # Gene annotation (including splice sites)
-  --sjdbOverhang "$SJDB_OVERHANG" \                 # Read length minus 1 (e.g., 100)
+  --runMode genomeGenerate \
+  --runThreadN "$THREADS" \
+  --genomeDir "$WORKDIR/star_index" \
+  --genomeFastaFiles "$WORKDIR/ref/genome.fa" \
+  --sjdbGTFfile "$WORKDIR/ref/genes.gff" \
+  --sjdbOverhang "$SJDB_OVERHANG" \
   2>&1 | tee "$WORKDIR/logs/06_star_index.log"
 
 echo "STAR index done."
+# Mode: generate genome index
+# Number of threads to use
+# Index output directory
+# Reference genome
+# Gene annotation (including splice sites)
+# Read length minus 1 (e.g., 100)
+
 # need big capacity and long time
