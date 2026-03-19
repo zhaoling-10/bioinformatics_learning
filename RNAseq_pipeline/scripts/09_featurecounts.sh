@@ -9,7 +9,7 @@ cd "$WORKDIR"
 echo "start gene_counts_featureCounts"
 
 # check whether GTF files exist
-test -f "ref/genes.gtf" || { echo "Missing"; exit 1; }
+test -f "ref/genes.gff" || { echo "Missing"; exit 1; }
 
 # Use the featureCounts command (from the subread package)
 # This is currently the most commonly used gene counting tool, fast and with low memory usage
@@ -17,7 +17,7 @@ featureCounts \
   -T "$THREADS" \
   -p \
   -s 0 \
-  -a ref/genes.gtf \
+  -a ref/genes.gff \
   -o counts/gene_counts_featureCounts.txt \
   aln/*.Aligned.sortedByCoord.out.bam \
   2>&1 | tee logs/09_featurecounts.log
