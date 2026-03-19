@@ -17,6 +17,8 @@ featureCounts \
   -T "$THREADS" \
   -p \
   -s 0 \
+  -t exon \
+  -g ID \
   -a ref/genes.gff \
   -o counts/gene_counts_featureCounts.txt \
   aln/*.Aligned.sortedByCoord.out.bam \
