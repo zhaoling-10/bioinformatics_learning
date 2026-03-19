@@ -8,7 +8,7 @@ cd "$WORKDIR"
 
 echo "start gene_counts_featureCounts"
 
-# check whether GTF files exist
+# check whether GFF files exist
 test -f "ref/genes.gff" || { echo "Missing"; exit 1; }
 
 # Use the featureCounts command (from the subread package)
