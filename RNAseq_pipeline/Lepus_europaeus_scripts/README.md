@@ -14,3 +14,4 @@ Instructions for these scripts:
 12. 11_multiqc.sh --> Generating a comprehensive quality report
 
 Because I couldn't use the prefetch function on CSC, so I downloaded data in fastq format from EBI. The script name downloading the data is download_with_enaDataGet_smart.sbatch, and I didn't try running the 01-03 script.
+Additionally, the script for obtaining SRR numbers based on the project ID is named 'extract_srr_from_projects.sh'.
