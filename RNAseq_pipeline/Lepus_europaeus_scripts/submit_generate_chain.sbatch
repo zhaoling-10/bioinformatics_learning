@@ -10,9 +10,9 @@
 
 set -euo pipefail
 
-# Resolve script directory so this works from any submit location.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="/scratch/project_2002674/RNAseq_hares/scripts/RNA-Seq_trial/RNA-Seq_PRJNA826339"
+# Script location on the server (same project directory as input data).
+GENERATE_CHAIN_SCRIPT="${PROJECT_DIR}/Generate_chain_file.sh"
 
 mkdir -p "${PROJECT_DIR}/logs"
 cd "${PROJECT_DIR}"
@@ -38,7 +38,7 @@ echo "  MM2_INDEX_SIZE=${MM2_INDEX_SIZE}"
 echo "Slurm stdout log: ${PROJECT_DIR}/logs/generate_chain_${SLURM_JOB_ID}.out"
 echo "Slurm stderr log: ${PROJECT_DIR}/logs/generate_chain_${SLURM_JOB_ID}.err"
 
-bash "${SCRIPT_DIR}/Generate_chain_file.sh"
+bash "${GENERATE_CHAIN_SCRIPT}"
 
 echo "Job finished at: $(date)"
 echo "Check logs:"
