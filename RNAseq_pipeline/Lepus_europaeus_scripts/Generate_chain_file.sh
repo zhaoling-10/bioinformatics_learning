@@ -10,12 +10,23 @@ LT_REF="${WORKDIR}/lepus_timidus_gff/ref/genome.fa"     # LT reference genome
 
 CHAINDIR="${WORKDIR}/liftover"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Allow overriding to reduce memory usage when needed
-MM2_THREADS="${MM2_THREADS:-4}"
+# Allow overriding for performance/memory trade-offs
+MM2_THREADS="${MM2_THREADS:-${SLURM_CPUS_PER_TASK:-4}}"
 MM2_INDEX_SIZE="${MM2_INDEX_SIZE:-4G}"
+MM2_PRESET="${MM2_PRESET:-asm10}"
+# Keep defaults conservative for closely related species.
+MM2_EXTRA_OPTS="${MM2_EXTRA_OPTS:-}"
+read -r -a MM2_EXTRA_OPTS_ARR <<< "${MM2_EXTRA_OPTS}"
 
 mkdir -p "${CHAINDIR}"
 cd "${CHAINDIR}"
+mkdir -p logs
+RUN_LOG="logs/generate_chain_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "${RUN_LOG}") 2>&1
+echo "Run started at: $(date)"
+echo "Runtime log: ${CHAINDIR}/${RUN_LOG}"
+echo "minimap2 preset/options: -x ${MM2_PRESET} ${MM2_EXTRA_OPTS}"
+echo "minimap2 threads/index: -t ${MM2_THREADS} -I ${MM2_INDEX_SIZE}"
 
 module load minimap2 2>/dev/null || true
 module load samtools 2>/dev/null || true
@@ -44,8 +55,9 @@ convert_paf_to_chain() {
 # -cx asm10: suitable for species with 90-95% similarity (more appropriate for these two Lepus species)
 
 minimap2 \
-    -cx asm10 \
-    --cs \
+    -x "${MM2_PRESET}" \
+    -c \
+    "${MM2_EXTRA_OPTS_ARR[@]}" \
     -t "${MM2_THREADS}" \
     -I "${MM2_INDEX_SIZE}" \
     "${LT_REF}" \
@@ -62,8 +74,9 @@ echo "Chain file generation completed"
 
 # Similarly, generate the reverse chain (LT → LE)
 minimap2 \
-    -cx asm10 \
-    --cs \
+    -x "${MM2_PRESET}" \
+    -c \
+    "${MM2_EXTRA_OPTS_ARR[@]}" \
     -t "${MM2_THREADS}" \
     -I "${MM2_INDEX_SIZE}" \
     "${LE_REF}" \
@@ -71,3 +84,5 @@ minimap2 \
     > LT_to_LE.paf
 
 convert_paf_to_chain LT_to_LE.paf LT_to_LE.chain
+echo "Run finished at: $(date)"
+echo "Runtime log saved to: ${CHAINDIR}/${RUN_LOG}"
