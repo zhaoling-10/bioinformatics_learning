@@ -38,3 +38,6 @@ echo "Slurm stderr log: ${PROJECT_DIR}/logs/liftover_vcf_${SLURM_JOB_ID}.err"
 bash "${LIFTOVER_SCRIPT}"
 
 echo "Job finished at: $(date)"
+echo "Check logs:"
+echo "  - ${PROJECT_DIR}/logs/liftover_vcf_${SLURM_JOB_ID}.out"
+echo "  - ${PROJECT_DIR}/logs/liftover_vcf_${SLURM_JOB_ID}.err"

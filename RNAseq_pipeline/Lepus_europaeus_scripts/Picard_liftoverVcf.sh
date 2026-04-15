@@ -17,6 +17,8 @@ LT_REF="${WORKDIR}/lepus_timidus_gff/ref/genome.fa"
 # ============================================================
 LE_VCF="${WORKDIR}/lepus_europaeus_gff/variants/all.filtered.vcf.gz"
 LT_VCF="${WORKDIR}/lepus_timidus_gff/variants/all.filtered.vcf.gz"
+LE_DICT="${LE_REF%.fa}.dict"
+LT_DICT="${LT_REF%.fa}.dict"
 
 if [[ ! -f "${LE_VCF}" || ! -f "${LT_VCF}" ]]; then
     echo "ERROR: input VCF not found."
@@ -33,6 +35,26 @@ if [[ ! -f "${CHAINDIR}/LE_to_LT.chain" || ! -f "${CHAINDIR}/LT_to_LE.chain" ]];
     echo "  - ${CHAINDIR}/LT_to_LE.chain"
     exit 1
 fi
+
+ensure_ref_support_files() {
+    local ref_fa="$1"
+    local ref_dict="$2"
+
+    if [[ ! -f "${ref_fa}.fai" ]]; then
+        echo "Index missing for ${ref_fa}; creating .fai with samtools faidx"
+        samtools faidx "${ref_fa}"
+    fi
+
+    if [[ ! -f "${ref_dict}" ]]; then
+        echo "Dictionary missing for ${ref_fa}; creating ${ref_dict} with Picard"
+        picard CreateSequenceDictionary \
+            R="${ref_fa}" \
+            O="${ref_dict}"
+    fi
+}
+
+ensure_ref_support_files "${LE_REF}" "${LE_DICT}"
+ensure_ref_support_files "${LT_REF}" "${LT_DICT}"
 
 # If your VCF names are different, inspect available files first.
 ls "${WORKDIR}/lepus_europaeus_gff/variants/" "${WORKDIR}/lepus_timidus_gff/variants/"
