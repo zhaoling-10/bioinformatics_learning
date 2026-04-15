@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+module load samtools 2>/dev/null || true
+module load picard 2>/dev/null || true
+
 # ============================================================
 # Base paths on CSC server
 # ============================================================
@@ -14,9 +17,6 @@ LT_REF="${WORKDIR}/lepus_timidus_gff/ref/genome.fa"
 # ============================================================
 LE_VCF="${WORKDIR}/lepus_europaeus_gff/variants/all.filtered.vcf.gz"
 LT_VCF="${WORKDIR}/lepus_timidus_gff/variants/all.filtered.vcf.gz"
-
-module load picard 2>/dev/null || true
-module load bcftools 2>/dev/null || true
 
 if [[ ! -f "${LE_VCF}" || ! -f "${LT_VCF}" ]]; then
     echo "ERROR: input VCF not found."
@@ -63,8 +63,23 @@ picard LiftoverVcf \
     WRITE_ORIGINAL_POSITION=true \
     2>&1 | tee "${CHAINDIR}/liftover_LT_to_LE.log"
 
+if [[ ! -f "${CHAINDIR}/LE_lifted_to_LT.vcf.gz" || ! -f "${CHAINDIR}/LT_lifted_to_LE.vcf.gz" ]]; then
+    echo "ERROR: Liftover did not produce expected output VCF files."
+    echo "Check logs:"
+    echo "  - ${CHAINDIR}/liftover_LE_to_LT.log"
+    echo "  - ${CHAINDIR}/liftover_LT_to_LE.log"
+    exit 1
+fi
+
 # Check results
 echo "=== LE→LT liftover results ==="
-bcftools stats "${CHAINDIR}/LE_lifted_to_LT.vcf.gz" | grep "^SN"
-echo "=== Number of sites that failed to liftover ==="
-bcftools view -H "${CHAINDIR}/LE_to_LT_rejected.vcf.gz" | wc -l
+if command -v bcftools >/dev/null 2>&1; then
+    bcftools stats "${CHAINDIR}/LE_lifted_to_LT.vcf.gz" | grep "^SN" || true
+    echo "=== Number of sites that failed to liftover ==="
+    bcftools view -H "${CHAINDIR}/LE_to_LT_rejected.vcf.gz" | wc -l
+else
+    echo "WARNING: bcftools not found, skip stats summary."
+    echo "Install/load bcftools and run manually:"
+    echo "  bcftools stats ${CHAINDIR}/LE_lifted_to_LT.vcf.gz | grep '^SN'"
+    echo "  bcftools view -H ${CHAINDIR}/LE_to_LT_rejected.vcf.gz | wc -l"
+fi
