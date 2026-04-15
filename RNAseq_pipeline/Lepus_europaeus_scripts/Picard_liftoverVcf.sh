@@ -35,7 +35,7 @@ if [[ ! -f "${CHAINDIR}/LE_to_LT.chain" || ! -f "${CHAINDIR}/LT_to_LE.chain" ]];
 fi
 
 # If your VCF names are different, inspect available files first.
-ls "${WORKDIR}/variants/"
+ls "${WORKDIR}/lepus_europaeus_gff/variants/" "${WORKDIR}/lepus_timidus_gff/variants/"
 
 # ============================================================
 # Method A: Picard LiftoverVcf (recommended)
